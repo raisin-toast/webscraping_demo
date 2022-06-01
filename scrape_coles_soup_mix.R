@@ -46,3 +46,9 @@ cent <- html %>%
   read_html() %>%
   html_elements(".cent-value") %>%
   html_text() 
+
+remDr$close()
+
+system("docker stop my_container")
+
+system("docker rm my_container")
