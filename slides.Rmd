@@ -1,0 +1,164 @@
+---
+title: "webscraping_demo"
+author: "tyler reysenbach"
+date: '2022-05-31'
+output: ioslides_presentation
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+## Welcome to webscrapping: a brief intro in 3 examples
+
+![](https://media.giphy.com/media/zhbrTTpmSCYog/giphy.gif)
+
+## Structure of today 
+
+
+
+## What do you need to know to start webscrapping? 
+
+> - A good attitude and gumption 
+> - A willingness to engage in trial and error 
+> - A lil bit of resilience 
+
+## But what do you actually need to know? 
+
+> - An approximate understanding of html (the more you know the less trial and error is required)
+> - Basic understanding of nettiquette (`polite` will help you with most of it)
+> - An understanding of containers (although I just steal the same example code every time)
+
+
+## What is html? 
+```
+<html>
+<head>
+  <title>Page title</title>
+</head>
+<body>
+  <h1 id='first'>A heading</h1>
+  <p>Some text &amp; <b>some bold text.</b></p>
+  <img src='myimg.png' width='100' height='100'>
+</body>
+
+```
+> - it's the stuff webpages are made of (alas not the stuff dreams are made of)
+> - it's hierarchical with elements nested within each other 
+> - each tag has a start and an end
+
+## Why does this matter? 
+
+> - html tags are how you tell your code what you want to extract 
+> - understanding it is nested helps you refine your code helping to look for what you want
+> - finding the right selector is 90% of the struggle 
+
+## Let's look at a webpage
+
+https://en.wikipedia.org/wiki/List_of_soups
+
+## Some tips 
+> - normally you're looking for a `class` or an `id`
+> - selectorgadget is a helpful tool
+> - I also live my life repeatedly inspecting things and hoping for the best (a valid option as well)
+
+## How does one scrape a website? 
+
+![](https://media.giphy.com/media/dwmNhd5H7YAz6/giphy.gif)
+
+## Important to know there are two types of websites 
+
+> - those that use javascript.... 
+> - and those that don't 
+
+## Let's start with those that don't free websites
+
+- Packages to use: `polite` (for polite webscrapping) and `rvest`
+ - You want to use polite (rather than rvest as most example on the internet do) to avoid being booted from the webpage 
+
+ - General workflow: 
+
+```
+session <-  polite::bow(website)
+
+scrape(session) %>% 
+  html_nodes("<insert your selector code here>") %>% 
+  html_text()
+
+```
+
+## Example time! 
+
+## How do you scrape a javascript website? 
+> - javascript websites need to be opened and loaded up before you scrape them
+> - thankfully, someone has taken care of that problem and made Rselenium
+> - there is one slight catch however... 
+> - selenium can be a bit tricky to install/manage/I don't think it works on windows and I have a windows system
+
+## What do I do then?
+> - Use a container! 
+
+## A brief tangent into containers
+> - Containers are an incredibly useful tool for improving code reproducibility 
+> - They are essentially are a virtual machine that just has the software needed for you to run a program 
+> - Useful when you need software that might be different across individual's computers 
+
+## How do I container? 
+> - docker is the main software you need
+> - https://www.docker.com/
+> - install it in the standard way 
+
+## javascript workflow - setup 
+
+```
+# pull down the docker container and give a name
+system("docker run -d --name my_container -p 4445:4444 selenium/standalone-chrome:2.53.0")
+
+# check it is running
+system("docker ps")
+
+# get your remote driver set up and ready to go
+remDr <- remoteDriver(
+  remoteServerAddr = "localhost",
+  port = 4445L,
+  browserName = "chrome"
+)
+
+remDr$open()
+remDr$getStatus()
+
+```
+
+## javascript workflow - scrape
+
+```
+
+remDr$navigate(website) 
+
+html <- remDr$getPageSource()[[1]]
+
+# this is your stand webscrapping workflow 
+html %>%
+    read_html() %>%
+    html_element("<insert your selector code here>") %>%
+    html_text() 
+
+```
+
+## javascript workflow - clean up and close 
+
+```
+remDr$close()
+
+system("docker stop my_container")
+
+system("docker rm my_container")
+
+```
+
+## example time 
+
+
+## broadly thems the vibes - any questions? 
+
+## if we have time further example
