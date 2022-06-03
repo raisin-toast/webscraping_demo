@@ -21,9 +21,10 @@ url <- tibble(dates) %>%
          url = glue::glue("https://www.health.gov.au/sites/default/files/documents/{year}/{month}/covid-19-vaccination-geographic-vaccination-rates-sa3-{dates}.xlsx"), 
          dest_file = "output/vax_sa3_sheets/{dates}.xlsx") 
 
-download_clean_sa3_data <- function(url, date) {
-  download.file(url,  destfile = glue::glue("output/vax_sa3_sheets/test_{date}.xlsx"), mode = "wb")
+download_clean_sa3_data <- function(url, dates) {
+  download.file(url,  destfile = glue::glue("output/vax_sa3_sheets/test_{dates}.xlsx"), mode = "wb")
 }
 
 url %>%  
-  purrr::walk(download_clean_sa3_data)
+  select(dates, url) %>% 
+  purrr::pwalk(download_clean_sa3_data)
