@@ -28,8 +28,9 @@ html <- remDr$getPageSource()[[1]]
 
 html %>%
   read_html() %>%
-  html_element(".product-pricing-info") %>%
-  html_text() 
+  html_elements(".product-pricing-info") %>%
+  html_text() %>% 
+  parse_number()
 
 html %>%
   read_html() %>%

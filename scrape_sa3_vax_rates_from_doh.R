@@ -22,8 +22,8 @@ url <- tibble(dates) %>%
          dest_file = "output/vax_sa3_sheets/{dates}.xlsx") 
 
 download_clean_sa3_data <- function(url, date) {
-  download.file(url,  destfile = "output/vax_sa3_sheets/test.xlsx", mode = "wb")
-  
-  read_excel("output/vax_sa3_sheets/test.xlsx") %>% 
-    janitor::clean_names() %>% glimpse()
+  download.file(url,  destfile = glue::glue("output/vax_sa3_sheets/test_{date}.xlsx"), mode = "wb")
 }
+
+url %>%  
+  purrr::walk(download_clean_sa3_data)

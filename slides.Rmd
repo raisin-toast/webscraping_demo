@@ -50,7 +50,7 @@ knitr::opts_chunk$set(echo = FALSE)
 ## Why does this matter? 
 
 > - html tags are how you tell your code what you want to extract 
-> - understanding it is nested helps you refine your code helping to look for what you want
+> - understanding it is nested helps you refine your code to look for what you want
 > - finding the right selector is 90% of the struggle 
 
 ## Let's look at a webpage
@@ -71,12 +71,12 @@ https://en.wikipedia.org/wiki/List_of_soups
 > - those that use javascript.... 
 > - and those that don't 
 
-## Let's start with those that don't free websites
+## Let's start with those that don't
 
-- Packages to use: `polite` (for polite webscrapping) and `rvest`
- - You want to use polite (rather than rvest as most example on the internet do) to avoid being booted from the webpage 
+> - Packages to use: `polite` (for polite webscrapping) and `rvest`
+> - You want to use polite (rather than rvest as most example on the internet do) to avoid being booted from the webpage 
 
- - General workflow: 
+## General workflow: 
 
 ```
 session <-  polite::bow(website)
